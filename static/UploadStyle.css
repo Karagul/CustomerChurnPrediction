@@ -1,0 +1,32 @@
+body{background-color:orange;font-family: "Arial", "Helvetica", sans-serif}
+
+input[type=submit] {
+    padding:5px 15px;
+    background:#ccc;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 10px;
+}
+
+h2{margin-left: 5px;}
+
+.ImageHolder {margin:5px; margin-bottom: 30px}
+.UploadData { margin: 10px;width: 400px; margin-top:30px}
+.ifPredict{display:none}
+.featureSelect{display:none}
+
+
+input[type=text] {
+    padding: 0;
+    height: 30px;
+    position: relative;
+    width: 100px;
+    outline: none;
+    border: 2px solid #cdcdcd;
+    border-color: rgba(0,0,0,.15);
+    background-color: gray;
+    font-size: 16px;
+}
+
+

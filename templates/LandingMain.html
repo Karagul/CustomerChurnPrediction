@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='UploadStyle.css') }}">
+     <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--script src="/js/jquery-ui.min.js" type="text/javascript"></script-->
+
+     <script type="text/javascript">
+    $(document).ready(function(){
+    var radioValue = ""
+    $("input[type='radio']").prop('checked',false);
+          $("input[type='radio']").click(function(){
+            radioValue = $("input[name='DataType']:checked").val();
+            if(radioValue == "Train"){
+            var codeBlock = '<div class="content">' +
+                        '<h3>Upload the ' + radioValue + 'ing dataset to create a model</h3>' +
+                        '</div>';
+                        $(".wrapper").html(codeBlock);
+             document.getElementById('ifPredict').style.display = 'none';
+             document.getElementById('featureSelect').style.display = 'block';
+            }
+            else if(radioValue == "Predict") {
+            var codeBlock = '<div class="content">' +
+                        '<h3>Upload the ' + radioValue + 'ion dataset </h3>' +
+                       '</div>';
+                        $(".wrapper").html(codeBlock);
+             document.getElementById('ifPredict').style.display = 'block';
+             document.getElementById('featureSelect').style.display = 'none';
+            }
+            else{
+            alert("Please select a dataset type");
+            }
+        });
+
+        $("input[type='submit']").click(function(){
+        if(radioValue.length == 0)
+        {
+        alert("Please select a dataset type");
+        return false;
+        }
+        });
+
+    $("input[type='radio']").on('change', function() {
+    $("input[name='datatype']").val($(this).val());
+    });
+
+
+    });
+</script>
+<!--style type="text/css">
+  .UploadData {color:#990000; margin: 5px;width: 400px}
+   .ImageHolder {height:auto;margin: 5px; margin-bottom: 20px}
+ </style-->
+</head>
+<body>
+ <div class = "ImageHolder">
+    <img width=1250 height=400 border=0 src="/static/MainImage.jpg">
+ </div>
+
+<div class = "Selection">
+ <h2>DataSet</h2>
+  <label><input type="radio" name="DataType" value="Train">Train</label>
+    <label><input type="radio" name="DataType" value="Predict">Predict</label>
+    <br />
+    <p></p>
+     </div>
+
+    <!--img src="https://www.w3schools.com/images/picture.jpg" alt="Mountain"-->
+<div class="wrapper"></div>
+
+
+    <div class = "UploadData">
+    <form action = "http://localhost:5000/uploader" method = "POST"
+         enctype = "multipart/form-data">
+         <!--h2 class="file-upload-heading">Upload the training data</h2-->
+         <input type = "file" name = "file" />
+        <p>Type <input class ="textbox" type = "text" name = "datatype" /></p>
+        <div id="ifPredict"  style="display:none">
+             <p>Input threshold(0-1) to differentiate the two classes churn or not churn </p>
+            <p>Threshold <input class ="threshold"  placeholder="0.5" type = "number" name = "thresh" min = "0" max = "1"  step = "0.01"></p>
+        </div>
+        <div id="featureSelect" style="display:none">
+             <p>Choose the number of features to use, very large featureset tend to overfit </p>
+            <p>Features <input class ="featuresel"  placeholder="10" type = "number" name = "features" min = "1" max = "100"  step = "1"></p>
+        </div>
+        <br>
+         <input type = "submit"/>
+        <!--button type='submit'/-->
+      </form>
+        </div>
+
+</body>
+</html>

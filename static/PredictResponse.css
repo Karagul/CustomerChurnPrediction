@@ -1,0 +1,56 @@
+body            {background-colour:blue;font-family: "Arial", "Helvetica", sans-serif}
+a, h1, h2       { color: #377ba8; }
+h1, h2          { margin: 0; }
+h1              { border-bottom: 2px solid #eee; }
+h2              { font-size: 1.2em; }
+P {margin:5px;}
+table.dataframe, .dataframe th, .dataframe td {
+  border: none;
+  border-bottom: 1px solid #C8C8C8;
+  border-collapse: collapse;
+  text-align:left;
+  padding: 10px;
+  margin-bottom: 40px;
+  font-size: 0.9em;
+}
+
+.churn th {
+    background-color: orange;
+    color: white;
+}
+
+.coef th {
+    background-color: orange;
+    color: white;
+}
+
+
+
+tr:hover            { background-color: #ffff99;}
+
+
+.page{float:left}
+
+#FeatureBar{
+float:right;
+margin-left: 10px;
+border: 6px solid orange ;
+margin-top: 30px;
+margin-right: 40px;
+}
+
+
+.churnrev{float:left;
+margin-left: 65px;
+border: 6px solid orange ;
+width: 350px;
+margin-top: 30px;}
+
+.FeatureInfo{
+float:left;
+border: 6px solid orange ;
+width: 300px;
+margin-left: 30px;
+margin-top: 30px;
+}
+

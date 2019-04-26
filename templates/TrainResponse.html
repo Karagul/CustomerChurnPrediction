@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='TrainResponse.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body><div class="trresp">
+    <p>
+    <h2>File uploaded successfully<br>
+        Model building is now complete with model CV score {{ cvs}} percentage<br>
+        Ready for prediction
+    </h2>
+    </p>
+
+    </div>
+
+<div class = "confmatrx">
+   <h1>Confusion Matrix</h1>
+    <div id = "CM_block" style="display:block">
+    {% for val in cfmtrx %}
+        {{ val|safe }}
+   {% endfor %}
+    </div>
+</div>
+    <div id = "CM_block2" style="display:none">
+        <div id="dvTable"></div>
+        <br>
+
+    </div>
+
+<div id="container">
+    <form class="form-CM" role="form">
+    <p>Threshold <input class ="threshold"  id="id1" placeholder=0.5 type = "number" name = "CM_threshold" min = "0" max = "1"  step = "0.01"></p>
+    <button class="btn" type="button">Invoke </button>
+      </form>
+
+</div>
+<div class="wrapper"></div>
+
+<div id="myDiv"> </div>
+
+<script type="text/javascript">
+   $(function() {
+    $('button').click(function() {
+        var thresh_id1 = $('#id1').val();
+         document.getElementById('CM_block').style.display = 'none';
+         document.getElementById('CM_block2').style.display = 'block';
+        $.ajax({
+            url: '/display_CM',
+            data: $('form').serialize(),
+            type: 'POST'
+        })
+        .done(function(data){
+        console.log(data.C00);
+        console.log(data.C11);
+        var c00 = parseInt(data.C00);
+        var c01 = parseInt(data.C01);
+        var c10 = parseInt(data.C10);
+        var c11 = parseInt(data.C11);
+        GenerateTable(c00, c01,c10, c11);
+        var churn_acc = ((c11/(c10+c11))*100).toFixed(2);
+        var nonChurn_acc = ((c00/(c00+c01))*100).toFixed(2);
+        var overall_acc = (((c00+c11)/(c00+c01+c10+c11))*100).toFixed(2);
+         var codeBlock = '<div class="content">' +
+                        '<h3>Detection Accuracy</h3>' +
+                        '<P>Churn detection accuracy - ' + churn_acc + '%<br>'+
+                        'Non Churn detection accuracy - ' +nonChurn_acc + '%<br>'+
+                        'Overall accuracy - '+ overall_acc +'%</P>'+
+                        '</div>';
+                        $(".wrapper").html(codeBlock);
+        });
+
+        function GenerateTable(C00, C01,C10, C11) {
+    //Build an array containing CMatrix.
+    var CMatrix = new Array();
+    CMatrix.push(["Predicted", "0", "1", "ALL"]);
+    CMatrix.push(["Actual", " ", " ", " "]);
+    CMatrix.push([0, C00, C01, (C00+C01)]);
+    CMatrix.push([1, C10, C11, (C10+C11)]);
+    CMatrix.push(["ALL", (C00+C10), (C01+C11), (C00+C01+C10+C11)]);
+
+    //Create a HTML Table element.
+    var table = document.createElement("TABLE");
+    table.border = "3";
+
+    //Get the count of columns.
+    var columnCount = CMatrix[0].length;
+
+    //Add the header row.
+    var row = table.insertRow(-1);
+    for (var i = 0; i < columnCount; i++) {
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = CMatrix[0][i];
+        row.appendChild(headerCell);
+    }
+
+    //Add the data rows.
+    for (var i = 1; i < CMatrix.length; i++) {
+        row = table.insertRow(-1);
+        for (var j = 0; j < columnCount; j++) {
+        if(j ==0){
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = CMatrix[i][j];
+         row.appendChild(headerCell);
+        }
+        else{
+            var cell = row.insertCell(-1);
+            cell.innerHTML = CMatrix[i][j];}
+        }
+    }
+
+    var dvTable = document.getElementById("dvTable");
+    dvTable.innerHTML = "";
+    dvTable.appendChild(table);
+}
+    });
+});
+
+  var trace1 = {
+  x: {{roc_data[0]}},
+  y: {{roc_data[1]}},
+  name: 'Model ROC',
+  type: 'scatter',
+  fill: 'tozeroy',
+  marker: {
+    color: 'rgb(219, 64, 82)',
+    size: 12
+  }
+};
+ var trace2 = {
+  x: [0,.2,.4,.6,.8,1],
+  y: [0,.2,.4,.6,.8,1],
+  name: 'Default ROC',
+  type: 'scatter',
+  line: {
+    dash: 'dot',
+    width: 4
+  },
+  marker: {
+    color: 'rgb(219, 64, 82)',
+    size: 12
+  }
+};
+var layout = {
+title: 'ROC Curve <br>   AUC - {{rocAcc|safe}}',
+  xaxis: {
+    title: 'False positive rate'
+      },
+  yaxis: {
+    title: 'True positive rate'
+
+  },
+  width: 600,
+  height: 375,
+  paper_bgcolor : "#33E8E7"
+};
+var data = [trace1,trace2];
+Plotly.newPlot('myDiv', data, layout);
+</script>
+</body>
+</html>

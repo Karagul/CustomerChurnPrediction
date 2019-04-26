@@ -1,0 +1,58 @@
+body {background-color:orange;font-family: "Arial", "Helvetica", sans-serif}
+
+
+.trresp {
+    background-color: gray;
+    width: 600px;
+    height: 150px;
+    border: solid black 2px;
+    margin:25px;
+    margin-left: 150px;
+
+   }
+
+#CM_block {
+float:left;
+margin:20px;
+margin-left: 50px;
+position:relative;
+}
+
+#CM_block2 {
+float:left;
+margin:20px;
+margin-left: 20px;
+position:relative;
+height: 80px;
+width: 100px;
+}
+
+#container{
+margin-left: 270px;
+margin-top: 50px;
+height: 200px;
+width: 100px;
+}
+.wrapper{
+float:left;
+margin-left:20px;
+position:relative;
+height: 400px;
+width: 300px;
+margin-top: -60px;
+
+}
+.ROCtext{
+float:right;
+}
+#myDiv{
+float:right;
+width: 500;
+margin-right: 190px;
+margin-top: -290px;
+
+}
+
+
+
+
